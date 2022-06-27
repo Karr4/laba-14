@@ -3,12 +3,14 @@
 
 typedef struct prod {
     char prodname[30];
-    float weight;
     float cost;
     int warranty;
-    char model[30];
-    int number;
-    char seller[30];
+    float vol;
+    float cur;
+    float freq;
+    int up_lim;
+    int low_lim;
+    float err;
     struct prod *next;
     struct prod *prev;
 } prod;
@@ -19,7 +21,7 @@ typedef struct deque {
 } deq;
 
 void init_deque(deq *q) {
- q->first = q->last = NULL; //ініціалізація черги
+    q->first = q->last = NULL; //ініціалізація черги
 }
 
 void add_el(prod *t, deq *q) {
@@ -41,7 +43,7 @@ void read_file(deq *q) {
     //перевірка наявності файлу
     if (file == NULL)
     {
-
+        puts("Oops...file does not exist\nNext time, create it beforehand\n");
         return;
     }
     while (fread(p, sizeof(prod), 1, file)) {
@@ -54,19 +56,42 @@ void read_file(deq *q) {
 }
 
 void print(deq *q) {
+    float V = 0, I = 0;
+    int T = 0;
+    do{
+        printf("Enter required voltage: ");
+        scanf("%f", &V);
+        if(V <= 0){
+            printf("This number has to be natural\n");
+        }
+    } while(V <= 0);
+
+    do{
+        printf("Enter required current: ");
+        scanf("%f", &I);
+        if(I <= 0){
+            printf("This number has to be natural\n");
+        }
+    } while(I <= 0);
+
+    do{
+        printf("Enter required warranty: ");
+        scanf("%d", &T);
+        if(T <= 0){
+            printf("This number has to be natural\n");
+        }
+    } while(T <= 0);
+
     prod *p = q->first;
-    printf("| Product's name | Weight | Cost | Warranty | Model | Number of products | Seller |\n");
-    //перевірка на наяівність елементів черги
+    printf("| Product's name |   Cost   | Warranty |  Voltage  | Current | Frequency | Upper limit | Lower limit | Error |\n");
+    printf("+------------------------------------------------------------------------------------------------------------+\n");
     while (p != NULL) {
-            printf("| %14s | %4.2f | %5.2f | %d | %s | %d | %s |\n", p->prodname, p->weight, p->cost, p->warranty, p->model, p->number, p->seller);
-        /*printf("Product's name: %s\n", p->prodname);
-        printf("Weight: %3.2f kg\n", p->weight);
-        printf("Cost: %5.2f\n", p->cost);
-        printf("Warranty: %d\n", p->warranty);
-        printf("Model: %s\n", p->model);
-        printf("Number of products: %d\n", p->number);
-        printf("Seller: %s\n", p->seller);
-        printf("-------------------\n");*/
+            if (p->vol == V && p->cur < I && p->warranty < T)
+            {
+                printf("| %14s |  %5.2f | %8d |   %5.2f  |   %5.2f  |   %5.2f  | %11d | %11d | %5.2f |\n", p->prodname, p->cost, p->warranty, p->vol, p->cur, p->freq, p->up_lim, p->low_lim, p->err);
+                printf("+------------------------------------------------------------------------------------------------------------+\n");
+            }
+
         p = p->next;
     }
 }
