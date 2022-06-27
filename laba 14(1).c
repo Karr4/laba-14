@@ -3,12 +3,14 @@
 
 typedef struct prod {
     char prodname[30];
-    float weight;
     float cost;
     int warranty;
-    char model[30];
-    int number;
-    char seller[30];
+    float vol;
+    float cur;
+    float freq;
+    int up_lim;
+    int low_lim;
+    float err;
     struct prod *next;
     struct prod *prev;
 } prod;
@@ -22,22 +24,27 @@ void init_deque(deq *q) {
     q->first = q->last = NULL;   //ініціалізація черги
 }
 
+//1 4 5 7 8
 void enter(prod *p) {
     //ввід даних елементу
     printf("Enter product's name: ");
     scanf("%s", p->prodname);
-    printf("Enter weight(kg): ");
-    scanf("%f", &(p->weight));
     printf("Enter product's cost: ");
     scanf("%f", &(p->cost));
     printf("Enter warranty(months): ");
     scanf("%d", &(p->warranty));
-    printf("Enter product's model: ");
-    scanf("%s", p->model);
-    printf("Enter the number of pruduct's: ");
-    scanf("%d", &(p->number));
-    printf("Enter seller's name: ");
-    scanf("%s", p->seller);
+    printf("Enter product's voltage: ");
+    scanf("%f", &(p->vol));
+    printf("Enter pruduct's current: ");
+    scanf("%f", &(p->cur));
+    printf("Enter product's frequency: ");
+    scanf("%f", &(p->freq));
+    printf("Enter product's upper limit: ");
+    scanf("%d", &(p->up_lim));
+    printf("Enter product's lower limit: ");
+    scanf("%d", &(p->low_lim));
+    printf("Enter product's error: ");
+    scanf("%f", &(p->err));
     p->next = p->prev = NULL;
 }
 
@@ -84,6 +91,7 @@ int main()
         }
     } while(n <= 0);
 
+    puts("\n-------------------\n");
     for (int i = 0; i < n; i++){
         add_el(&q);
     }
